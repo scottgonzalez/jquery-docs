@@ -153,29 +153,7 @@
 					<xsl:if test="argument">
 						<xsl:text> </xsl:text>
 						<ul>
-							<xsl:for-each select="argument">
-								<li>
-									<!-- TODO take null=true into account -->
-									<xsl:value-of select="@name" />
-									<xsl:text>: </xsl:text>
-									<xsl:value-of select="@type" />
-									<xsl:text>, </xsl:text>
-									<xsl:value-of select="desc" />
-									<ul>
-										<xsl:for-each select="property">
-											<li>
-												<xsl:value-of select="@name" />
-												<xsl:text>: </xsl:text>
-												<xsl:value-of select="@type" />
-												<xsl:if test="desc">
-													<xsl:text>, </xsl:text>
-													<xsl:value-of select="desc" />
-												</xsl:if>
-											</li>
-										</xsl:for-each>
-									</ul>
-								</li>
-							</xsl:for-each>
+							<xsl:apply-templates select="argument"/>
 						</ul>
 					</xsl:if>
 				</xsl:for-each>
@@ -274,5 +252,38 @@
 </html>
 
 </xsl:template>
+
+
+<!-- arguments -->
+<xsl:template match="argument">
+	<li>
+		<xsl:value-of select="@name" />
+		<xsl:text>: </xsl:text>
+		<xsl:value-of select="@type" />
+
+		<xsl:if test="not(@null)">
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="desc" />
+			<ul>
+				<xsl:apply-templates select="property"/>
+			</ul>
+		</xsl:if>
+
+	</li>
+</xsl:template>
+
+<!-- argument properties -->
+<xsl:template match="argument/property">
+	<li>
+		<xsl:value-of select="@name" />
+		<xsl:text>: </xsl:text>
+		<xsl:value-of select="@type" />
+		<xsl:if test="desc">
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="desc" />
+		</xsl:if>
+	</li>
+</xsl:template>
+
 
 </xsl:stylesheet>
