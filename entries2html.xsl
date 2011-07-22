@@ -3,6 +3,9 @@
 <xsl:template match="/">
 
 <html>
+<link href="http://static.jquery.com/api/style.css" rel="stylesheet" />
+<link href="http://static.jquery.com/api/prettify.css" rel="stylesheet" />
+<div id="jq-siteContain" class="api-jquery-com"><div id="jq-primaryContent">
 <fieldset class="toc">
 	<legend>Contents</legend>
 	<ul class="toc-list">
@@ -16,15 +19,18 @@
 							<xsl:text>, </xsl:text>
 						</xsl:if>
 						<xsl:if test="@optional">[ </xsl:if>
-								<xsl:value-of select="@name" />
+						<!-- TODO add @type?! -->
+						<xsl:value-of select="@name" />
 						<xsl:if test="@optional"> ]</xsl:if>
 						</xsl:for-each>
 				<xsl:text> </xsl:text></xsl:if>)</xsl:if>
 					<xsl:text> </xsl:text>
+					<!-- TODO why put the desc in the title?? -->
 					<span class="desc">
 						<xsl:value-of select="desc" />
 					</span>
 				</a>
+			<!-- Outdated? There's no type=method on entry elements anymore? -->
 			<xsl:if test="@type='method'">
 				<ul>
 					<xsl:for-each select="signature">
@@ -61,7 +67,7 @@
 <xsl:variable name="entry-type" select="@type" />
 <xsl:variable name="entry-index" select="position()" />
 <xsl:variable name="number-examples" select="count(example)" />
-<div class="entry {@type}" id="{concat(@name,position())}">
+<div class="entry {@type} jq-box" id="{concat(@name,position())}">
 	<h2>
 		<span class="name"><xsl:value-of select="@name" /><xsl:if test="@type='method'">(<xsl:if test="signature/argument"><xsl:text> </xsl:text>
 			<xsl:for-each select="signature[1]/argument">
@@ -102,6 +108,76 @@
 						</xsl:if>
 					</dt>
 					<dd><xsl:copy-of select="desc/node()" /></dd>
+				</xsl:for-each>
+			</dl>
+		</xsl:if>
+		<xsl:if test="methods">
+			<h3>Methods</h3>
+			<dl>
+				<xsl:for-each select="methods[1]/method">
+					<xsl:variable name="method-name" select="@name" />
+					<xsl:variable name="method-type" select="@type" />
+					<dt>
+						<xsl:attribute name="id">method-<xsl:value-of select="$method-name" /></xsl:attribute>
+						<xsl:if test="added">
+							<span class="versionAdded">version added: <xsl:value-of select="added" /></span>
+						</xsl:if>
+						<h4 class="name">
+							<xsl:value-of select="$method-name" />
+						</h4>
+						<span class="type"><xsl:value-of select="$method-type" /></span>
+					</dt>
+					<dd><xsl:copy-of select="desc/node()" /></dd>
+					<!-- TODO add arguments -->
+				</xsl:for-each>
+			</dl>
+		</xsl:if>
+		<xsl:if test="events">
+			<h3>Events</h3>
+			<dl>
+				<xsl:for-each select="events[1]/event">
+					<xsl:variable name="event-name" select="@name" />
+					<xsl:variable name="event-type" select="@type" />
+					<dt>
+						<xsl:attribute name="id">event-<xsl:value-of select="$event-name" /></xsl:attribute>
+						<xsl:if test="added">
+							<span class="versionAdded">version added: <xsl:value-of select="added" /></span>
+						</xsl:if>
+						<h4 class="name">
+							<xsl:value-of select="$event-name" />
+						</h4>
+						<span class="type"><xsl:value-of select="$event-type" /></span>
+					</dt>
+					<dd><xsl:copy-of select="desc/node()" /></dd>
+					<!-- TODO refactor to reuse elsewhere -->
+					<xsl:if test="argument">
+						<xsl:text> </xsl:text>
+						<ul>
+							<xsl:for-each select="argument">
+								<li>
+									<!-- TODO take null=true into account -->
+									<xsl:value-of select="@name" />
+									<xsl:text>: </xsl:text>
+									<xsl:value-of select="@type" />
+									<xsl:text>, </xsl:text>
+									<xsl:value-of select="desc" />
+									<ul>
+										<xsl:for-each select="property">
+											<li>
+												<xsl:value-of select="@name" />
+												<xsl:text>: </xsl:text>
+												<xsl:value-of select="@type" />
+												<xsl:if test="desc">
+													<xsl:text>, </xsl:text>
+													<xsl:value-of select="desc" />
+												</xsl:if>
+											</li>
+										</xsl:for-each>
+									</ul>
+								</li>
+							</xsl:for-each>
+						</ul>
+					</xsl:if>
 				</xsl:for-each>
 			</dl>
 		</xsl:if>
@@ -194,7 +270,7 @@
 </div>
 
 </xsl:for-each>
-
+</div></div>
 </html>
 
 </xsl:template>

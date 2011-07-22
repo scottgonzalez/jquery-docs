@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="../../entries2html.xsl" ?>
 <entry name="accordion" namespace="fn" type="Widget" widgetnamespace="ui">
+	<!-- TODO needs desc/longdesc? -->
+	<desc>Short description</desc>
+	<longdesc>Long description</longdesc>
 	<created>1.0</created>
 	<options>
 		<option name="active" default="0">
@@ -39,6 +42,7 @@
 		</option>
 	</options>
 	<methods>
+		<!-- TODO add more methods, and actual signatures and types and everything -->
 		<method name="refresh">
 			<desc>
 				Recomputes panel dimensions.
@@ -59,6 +63,7 @@
 				<desc>
 					Extra event data for the ui accordion beforeActivate event
 				</desc>
+				<!-- TODO describe properties -->
 				<property name="newContent" type="jQuery" />
 				<property name="newHeader" type="jQuery" />
 				<property name="oldContent" type="jQuery" />
@@ -75,11 +80,14 @@
 				<desc>
 					Extra event data for the ui accordion activate event
 				</desc>
-				<property name="newContent" type="jQuery" />
+				<property name="newContent" type="jQuery">
+					<desc>Refers to the activated content panel</desc>
+				</property>
 				<property name="newHeader" type="jQuery" />
 				<property name="oldContent" type="jQuery" />
 				<property name="oldHeader" type="jQuery" />
 			</argument>
 		</event>
 	</events>
+	<!-- TODO add examples -->
 </entry>
